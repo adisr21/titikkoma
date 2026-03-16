@@ -1,10 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 const ParaphraseChecker: React.FC = () => {
   const [originalText, setOriginalText] = useState("");
   const [paraphrasedText, setParaphrasedText] = useState("");
   const [similarityScore, setSimilarityScore] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>, original: boolean) => {
+    const el = e.target;
+    if (original) {
+      setOriginalText(el.value);
+    } else {
+      setParaphrasedText(el.value);
+    }
+
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+};
 
   function tokenize(text: string): string[] {
   return text
@@ -104,9 +117,9 @@ const checkParaphrase = () => {
         <label className="font-semibold text-sm">Original Text</label>
         <textarea
           value={originalText}
-          onChange={(e) => setOriginalText(e.target.value)}
+          onChange={(e) => handleInput(e, true)}
           placeholder="Enter the original text here..."
-          className="w-full mt-2 p-3 border rounded-lg min-h-[120px]"
+          className="w-full mt-2 p-3 border rounded-lg min-h-[120px] resize-none overflow-hidden"
         />
         <p className="text-xs text-gray-400 text-right">
           {originalText.length} characters
@@ -117,9 +130,9 @@ const checkParaphrase = () => {
         <label className="font-semibold text-sm">Paraphrased Text</label>
         <textarea
           value={paraphrasedText}
-          onChange={(e) => setParaphrasedText(e.target.value)}
+          onChange={(e) => handleInput(e, false)}
           placeholder="Enter the paraphrased text here..."
-          className="w-full mt-2 p-3 border rounded-lg min-h-[120px]"
+          className="w-full mt-2 p-3 border rounded-lg min-h-[120px] resize-none overflow-hidden"
         />
         <p className="text-xs text-gray-400 text-right">
           {paraphrasedText.length} characters
