@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import { Button } from "./Button";
-import { Home, Users, Timer } from "lucide-react";
+import { Home, Users, Timer, FileText, Quote } from "lucide-react";
 
 export default function Sidebar() {
     const [open, setOpen] = useState(false);
@@ -39,7 +39,10 @@ export default function Sidebar() {
                         <Timer className="inline-block mr-2" /> Deadline Widget
                     </Link>
                     <Link to="/paraphrase-checker" className="block px-3 py-2 rounded hover:bg-gray-700">
-                        <Timer className="inline-block mr-2" /> Paraphrase Checker
+                        <FileText className="inline-block mr-2" /> Paraphrase Checker
+                    </Link>
+                    <Link to="/citation-generator" className="block px-3 py-2 rounded hover:bg-gray-700">
+                        <Quote className="inline-block mr-2" /> Citation Generator
                     </Link>
                 </nav>
             </aside>

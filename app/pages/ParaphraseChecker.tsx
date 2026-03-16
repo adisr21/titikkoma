@@ -1,3 +1,4 @@
+import { FileText } from "lucide-react";
 import React, { useState } from "react";
 import { TextArea } from "~/components/TextArea";
 
@@ -93,12 +94,16 @@ const checkParaphrase = () => {
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
 
-      <div>
-        <h2 className="text-2xl font-bold">Paraphrase Checker</h2>
+    <div>
+        <h2 className="text-2xl font-bold flex items-center gap-2">
+            <FileText className="text-blue-500" size={22} />
+            Paraphrase Checker
+        </h2>
+
         <p className="text-gray-500 text-sm">
-          Check the similarity between two texts
+            Check the similarity between two texts
         </p>
-      </div>
+    </div>
 
       <div className="flex flex-wrap">
         <div className="w-full xl:w-1/2 lg-rounded-xl p-3 shadow">
