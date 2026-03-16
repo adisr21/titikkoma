@@ -34,8 +34,8 @@ const GroupPicker: React.FC = () => {
 
   return (
     <div className="flex-1 p-6 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold flex items-center gap-2">
-        <Users className="text-blue-500" /> AdilKelompok
+      <h2 className="text-2xl font-bold flex items-center gap-2 mb-4">
+        <Users className="text-blue-500" /> Group Picker
       </h2>
 
       <textarea

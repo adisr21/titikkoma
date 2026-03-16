@@ -4,8 +4,8 @@ import Sidebar from "~/components/Sidebar";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "H-Berapa? - Titikkoma" },
-    { name: "description", content: "Atur deadline tugasmu dengan mudah menggunakan H-Berapa?" },
+    { title: "Deadline Widget - Titikkoma" },
+    { name: "description", content: "Atur deadline tugasmu dengan mudah menggunakan Deadline Widget." },
   ];
 }
 

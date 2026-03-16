@@ -51,8 +51,8 @@ const DeadlineWidget: React.FC = () => {
 
   return (
     <div className="flex-1 p-6 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold flex items-center gap-2">
-        <Timer className="text-red-500" /> H-Berapa?
+      <h2 className="text-2xl font-bold flex items-center gap-2 mb-4">
+        <Timer className="text-red-500" /> Deadline Widget
       </h2>
 
       <div className="flex flex-col md:flex-row gap-3">
