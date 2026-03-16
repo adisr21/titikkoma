@@ -53,7 +53,7 @@ const CitationGenerator: React.FC = () => {
     <div className="flex-1 p-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold flex items-center gap-2">
-          <Quote className="text-blue-500" /> SitasiCepat
+          <Quote className="text-blue-500" /> Citation Generator
         </h2>
         <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-bold">
           <button
