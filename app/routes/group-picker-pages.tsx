@@ -1,4 +1,4 @@
-import type { Route } from "./+types/home";
+import type { Route } from "./+types/group-picker-pages";
 import GroupPicker from "../pages/GroupPicker";
 import Sidebar from "~/components/Sidebar";
 
@@ -11,7 +11,7 @@ export function meta({}: Route.MetaArgs) {
 
 export default function GroupPickerPage() {
   return (
-    <div className="flex min-h-screen bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 max-w-full">
+    <div className="flex min-h-screen bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
       <Sidebar />
       <GroupPicker />
     </div>
