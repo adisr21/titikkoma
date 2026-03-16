@@ -1,23 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
+import { TextArea } from "~/components/TextArea";
 
 const ParaphraseChecker: React.FC = () => {
   const [originalText, setOriginalText] = useState("");
   const [paraphrasedText, setParaphrasedText] = useState("");
   const [similarityScore, setSimilarityScore] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
-  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>, original: boolean) => {
-    const el = e.target;
-    if (original) {
-      setOriginalText(el.value);
-    } else {
-      setParaphrasedText(el.value);
-    }
-
-    el.style.height = "auto";
-    el.style.height = el.scrollHeight + "px";
-};
 
   function tokenize(text: string): string[] {
   return text
@@ -115,11 +103,10 @@ const checkParaphrase = () => {
       <div className="flex flex-wrap">
         <div className="w-full xl:w-1/2 lg-rounded-xl p-3 shadow">
         <label className="font-semibold text-sm">Original Text</label>
-        <textarea
-          value={originalText}
-          onChange={(e) => handleInput(e, true)}
-          placeholder="Enter the original text here..."
-          className="w-full mt-2 p-3 border rounded-lg min-h-[120px] resize-none overflow-hidden"
+        <TextArea
+            value={originalText}
+            onChange={(e) => setOriginalText(e.target.value)}
+            placeholder="Enter the original text here..."
         />
         <p className="text-xs text-gray-400 text-right">
           {originalText.length} characters
@@ -128,11 +115,10 @@ const checkParaphrase = () => {
 
       <div className="w-full xl:w-1/2 lg-rounded-xl p-3 shadow">
         <label className="font-semibold text-sm">Paraphrased Text</label>
-        <textarea
-          value={paraphrasedText}
-          onChange={(e) => handleInput(e, false)}
-          placeholder="Enter the paraphrased text here..."
-          className="w-full mt-2 p-3 border rounded-lg min-h-[120px] resize-none overflow-hidden"
+        <TextArea
+            value={paraphrasedText}
+            onChange={(e) => setParaphrasedText(e.target.value)}
+            placeholder="Enter the paraphrased text here..."
         />
         <p className="text-xs text-gray-400 text-right">
           {paraphrasedText.length} characters
