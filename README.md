@@ -1,88 +1,81 @@
-# Welcome to React Router!
+# 📚 TitikKoma; — Student Productivity Toolbox
 
-A modern, production-ready template for building full-stack React applications using React Router.
+**TitikKoma;** adalah ekosistem *micro-tools* berbasis web yang dirancang khusus untuk mempermudah rutinitas akademik mahasiswa. Dibangun dengan fokus pada kecepatan, privasi (tanpa database), dan pengalaman pengguna yang modern.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 
-## Features
+---
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+## ✨ Fitur Utama
 
-## Getting Started
+Aplikasi ini mengintegrasikan 6 alat produktivitas dalam satu platform **Single Page Application (SPA)**:
 
-### Installation
+1. **⚖️ AdilKelompok**: Pengacak daftar nama mahasiswa ke dalam kelompok secara adil menggunakan algoritma *Fisher-Yates Shuffle*.
+2. **💬 HaloDosen**: Generator pesan WhatsApp otomatis dengan format bahasa Indonesia yang sopan dan baku untuk menghubungi dosen.
+3. **🔍 Parafrase**: Alat pembanding teks berdampingan untuk mengecek tingkat kemiripan tulisan menggunakan algoritma *Levenshtein Distance*.
+4. **📊 HitungKata**: Analisis statistik penulisan esai (jumlah kata/karakter) serta estimasi waktu baca (*reading time*).
+5. **📖 SitasiCepat**: Pembuat daftar pustaka instan dengan dukungan format internasional **APA 7th Edition** dan **MLA**.
+6. **⏳ H-Berapa?**: Widget hitung mundur deadline tugas yang tersimpan aman secara lokal di browser Anda.
 
-Install the dependencies:
+---
 
+## 🛠️ Tech Stack
+
+- **Core:** React 19+
+- **Routing:** React Router 7+
+- **Styling:** Tailwind CSS (dengan dukungan penuh Dark Mode & Glassmorphism)
+- **Icons:** Lucide React
+- **Persistence:** LocalStorage API (Data tetap aman tanpa perlu login/server)
+- **Build Tool:** Vite
+
+---
+
+## 📸 Fitur UI/UX Premium
+
+- **Mobile-First Navigation:** Navigasi bawah melayang (*Floating Bottom Nav*) yang ergonomis.
+- **Dynamic Routing:** Setiap tool memiliki URL unik untuk memudahkan *bookmarking*.
+- **Haptic-Like Interactions:** Animasi transisi yang halus dan respon tombol yang interaktif.
+- **Privacy-Centric:** Semua pemrosesan data dilakukan di sisi klien (browser), tidak ada data yang dikirim ke server luar.
+
+---
+
+## 🚀 Instalasi Lokal
+
+Ingin mencoba atau mengembangkan TitikKoma di komputer sendiri?
+
+1. **Clone Repositori**
+```bash
+git clone [https://github.com/adisr21/titikkoma.git](https://github.com/adisr21/titikkoma.git)
+cd titikkoma
+```
+2.  **Install Dependensi**
 ```bash
 npm install
 ```
-
-### Development
-
-Start the development server with HMR:
-
+3. **Jalankan Development Server**
 ```bash
 npm run dev
 ```
 
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
 ---
 
-Built with ❤️ using React Router.
-# titikkoma
+# 📁 Arsitektur Proyek
+```plain
+src/
+├── components/       # Komponen UI global (Navbar, Buttons)
+├── pages/            # Halaman fitur (GroupPicker, HaloDosen, dll)
+├── styles/           # Konfigurasi Tailwind & Global CSS
+├── App.jsx           # Entry point Routing & Layout Utama
+└── main.jsx          # Render engine
+```
+# 📜 Lisensi
+> Proyek ini berada di bawah lisensi MIT. Anda bebas untuk menggunakan, memodifikasi, dan mendistribusikannya kembali.
+Dibuat dengan semangat "Selesaikan tugasmu, lanjutkan langkahmu."
+---
+
+### Tips untuk GitHub Kamu:
+1. **Live Demo:** Begitu kamu selesai deploy ke Vercel/Netlify, pastikan linknya dipasang di bagian *About* di sisi kanan repositori GitHub agar orang bisa langsung mencoba tanpa install.
+2. **Issues:** Tambahkan beberapa "Issues" di GitHub sebagai rencana fitur masa depan (misal: "Fitur Export PDF untuk Sitasi"). Ini menunjukkan bahwa kamu aktif merencanakan pengembangan proyek.
