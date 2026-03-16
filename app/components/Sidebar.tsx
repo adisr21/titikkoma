@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { Button } from "./Button";
 
-export function Sidebar() {
+export default function Sidebar() {
     const [open, setOpen] = useState(false);
 
     return (
@@ -31,11 +31,8 @@ export function Sidebar() {
                     <Link to="/" className="block px-3 py-2 rounded hover:bg-gray-700">
                         Home
                     </Link>
-                    <Link to="/about" className="block px-3 py-2 rounded hover:bg-gray-700">
-                        About
-                    </Link>
-                    <Link to="/contact" className="block px-3 py-2 rounded hover:bg-gray-700">
-                        Contact
+                    <Link to="/group-picker" className="block px-3 py-2 rounded hover:bg-gray-700">
+                        Group Picker
                     </Link>
                 </nav>
             </aside>
