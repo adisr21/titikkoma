@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import { Button } from "./Button";
 
 export function Sidebar() {
     const [open, setOpen] = useState(false);
@@ -7,12 +8,12 @@ export function Sidebar() {
     return (
         <div className="flex">
             {/* Mobile button */}
-            <button
+            <Button
                 className="md:hidden fixed top-4 left-4 z-50 bg-gray-800 text-white p-2 rounded"
                 onClick={() => setOpen(!open)}
             >
                 ☰
-            </button>
+            </Button>
 
             {/* Overlay */}
             {open && (

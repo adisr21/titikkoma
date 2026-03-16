@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import { Button } from "./Button";
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -28,12 +29,9 @@ export function Navbar() {
                     </div>
 
                     {/* Mobile button */}
-                    <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="md:hidden text-gray-300 hover:text-white"
-                    >
+                    <Button onClick={() => setIsOpen(!isOpen)} className="md:hidden">
                         ☰
-                    </button>
+                    </Button>
                 </div>
 
                 {/* Mobile menu */}
