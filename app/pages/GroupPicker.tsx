@@ -37,6 +37,9 @@ const GroupPicker: React.FC = () => {
       <h2 className="text-2xl font-bold flex items-center gap-2 mb-4">
         <Users className="text-blue-500" /> Group Picker
       </h2>
+      <p className="text-gray-500 mb-6">
+        Masukkan nama-nama yang ingin dibagi ke dalam kelompok, satu nama per baris. Tentukan jumlah kelompok, lalu klik "Bagi Kelompok" untuk melihat hasilnya!
+      </p>
 
       <textarea
         value={rawNames}
@@ -62,11 +65,11 @@ const GroupPicker: React.FC = () => {
       </div>
 
       {resultGroups.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 pb-6">
           {resultGroups.map((group, i) => (
             <div
               key={i}
-              className="p-4 rounded-2xl border border-blue-100 dark:border-blue-900/30 bg-blue-50/50 dark:bg-blue-500/5"
+              className="p-4 rounded-2xl border border-blue-100 dark:border-blue-900/30 bg-blue-50/50 dark:bg-blue-500/5 mb-4"
             >
               <h4 className="font-bold text-blue-600 mb-2">
                 Kelompok {i + 1}

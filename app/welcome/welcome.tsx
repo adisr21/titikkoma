@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Users, Home, Timer, FileText, Quote } from "lucide-react";
+import { Users, Home, Timer, FileText, Quote, MessageSquare } from "lucide-react";
 
 export function Welcome() {
   return (
@@ -45,6 +45,13 @@ export function Welcome() {
           description="Generate citations in various formats."
           icon={<Quote className="text-purple-500" />}
           href="/citation-generator"
+        />
+
+        <ToolCard
+          title="Halo Dosen"
+          description=""
+          icon={<MessageSquare className="text-yellow-500" />}
+          href="/halo-lecturer"
         />
 
       </div>

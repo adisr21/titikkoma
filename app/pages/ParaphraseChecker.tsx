@@ -96,7 +96,7 @@ const checkParaphrase = () => {
 
     <div>
         <h2 className="text-2xl font-bold flex items-center gap-2">
-            <FileText className="text-blue-500" size={22} />
+            <FileText className="text-green-500" size={22} />
             Paraphrase Checker
         </h2>
 
@@ -131,7 +131,7 @@ const checkParaphrase = () => {
       </div>
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex gap-3 mt-6 pb-16">
         <button
           onClick={clearAll}
           className="flex-1 border rounded-lg py-3 font-semibold"
@@ -149,7 +149,7 @@ const checkParaphrase = () => {
       </div>
 
       {similarityScore !== null && (
-        <div className="bg-white p-6 rounded-xl shadow text-center space-y-4">
+        <div className="bg-white p-6 rounded-xl shadow text-center space-y-4 mt-6 pb-16">
           <h3 className="font-bold text-lg">Result</h3>
 
           <div className={`${getSimilarityColor(similarityScore)} text-5xl font-bold`}>

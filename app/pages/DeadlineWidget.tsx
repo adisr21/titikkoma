@@ -78,7 +78,7 @@ const DeadlineWidget: React.FC = () => {
         </button>
       </div>
 
-      <div className="space-y-3 mt-6">
+      <div className="space-y-3 mt-6 pb-16">
         {tasks.map((task) => (
           <div
             key={task.id}
