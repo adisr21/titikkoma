@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+html,
+body {
+  @apply bg-white dark:bg-gray-950;
+
+  @media (prefers-color-scheme: dark) {
+    color-scheme: dark;
+  }
+}
+/* Mobile styles */
+@media (max-width: 640px) {
+  /* Add your mobile-specific styles here */
+  
+}
+/* Tablet styles */
+@media (min-width: 641px) and (max-width: 1024px) {
+  /* Add your tablet-specific styles here */
+}
+/* Desktop styles */
+@media (min-width: 1025px) {
+  /* Add your desktop-specific styles here */
+}
