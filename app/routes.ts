@@ -4,4 +4,5 @@ export default [
     index("routes/home.tsx"),
     route("/group-picker", "routes/group-picker-pages.tsx"),
     route("/deadline-widget", "routes/deadline-widget-pages.tsx"),
+    route("/paraphrase-checker", "routes/paraphrase-checker-pages.tsx"),
 ] satisfies RouteConfig;

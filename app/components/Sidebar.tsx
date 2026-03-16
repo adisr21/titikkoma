@@ -38,6 +38,9 @@ export default function Sidebar() {
                     <Link to="/deadline-widget" className="block px-3 py-2 rounded hover:bg-gray-700">
                         <Timer className="inline-block mr-2" /> Deadline Widget
                     </Link>
+                    <Link to="/paraphrase-checker" className="block px-3 py-2 rounded hover:bg-gray-700">
+                        <Timer className="inline-block mr-2" /> Paraphrase Checker
+                    </Link>
                 </nav>
             </aside>
         </div>
