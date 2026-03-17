@@ -1,10 +1,79 @@
-import React, { useState } from "react";
-import { Users, Shuffle } from "lucide-react";
+import React, { useEffect, useMemo, useState } from "react";
+import { Users, Shuffle, Copy, Check, Share2, Link2 } from "lucide-react";
+import { useSearchParams } from "react-router";
+import { trackEvent } from "~/lib/analytics";
+
+type SharePayload = {
+  v: 1;
+  groups: string[][];
+};
+
+const encodeSharePayload = (payload: SharePayload) => {
+  const json = JSON.stringify(payload);
+  const bytes = new TextEncoder().encode(json);
+  let binary = "";
+
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
+  });
+
+  return btoa(binary)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+};
+
+const decodeSharePayload = (value: string): SharePayload | null => {
+  try {
+    const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized + "=".repeat((4 - (normalized.length % 4)) % 4);
+    const binary = atob(padded);
+    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+    const payload = JSON.parse(new TextDecoder().decode(bytes)) as SharePayload;
+
+    if (
+      payload.v !== 1 ||
+      !Array.isArray(payload.groups) ||
+      payload.groups.some(
+        (group) =>
+          !Array.isArray(group) ||
+          group.some((member) => typeof member !== "string")
+      )
+    ) {
+      return null;
+    }
+
+    return payload;
+  } catch {
+    return null;
+  }
+};
 
 const GroupPicker: React.FC = () => {
   const [rawNames, setRawNames] = useState<string>("");
   const [groupCount, setGroupCount] = useState<number>(2);
   const [resultGroups, setResultGroups] = useState<string[][]>([]);
+  const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
+  const [shareError, setShareError] = useState<string>("");
+  const [searchParams] = useSearchParams();
+
+  const sharedPayload = useMemo(() => {
+    const sharedValue = searchParams.get("share");
+    return sharedValue ? decodeSharePayload(sharedValue) : null;
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (!sharedPayload) return;
+
+    setResultGroups(sharedPayload.groups);
+    setGroupCount(sharedPayload.groups.length);
+    setRawNames(sharedPayload.groups.flat().join("\n"));
+    trackEvent("group_share_opened", {
+      groupCount: sharedPayload.groups.length,
+      memberCount: sharedPayload.groups.flat().length,
+    });
+  }, [sharedPayload]);
 
   const generateGroups = () => {
     const names = rawNames
@@ -30,6 +99,64 @@ const GroupPicker: React.FC = () => {
     });
 
     setResultGroups(groups);
+    setCopied(false);
+    setShared(false);
+    setShareError("");
+  };
+
+  const shareUrl = useMemo(() => {
+    if (typeof window === "undefined" || resultGroups.length === 0) return "";
+
+    const payload = encodeSharePayload({ v: 1, groups: resultGroups });
+    return `${window.location.origin}${window.location.pathname}?share=${payload}`;
+  }, [resultGroups]);
+
+  const handleCopyShareLink = async () => {
+    if (!shareUrl) return;
+
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setShared(false);
+      setShareError("");
+      trackEvent("group_share_clicked", {
+        method: "copy_link",
+        groupCount: resultGroups.length,
+        memberCount: resultGroups.flat().length,
+      });
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setShareError("Link gagal disalin. Coba bagikan manual.");
+    }
+  };
+
+  const handleNativeShare = async () => {
+    if (!shareUrl) return;
+
+    if (!navigator.share) {
+      await handleCopyShareLink();
+      return;
+    }
+
+    try {
+      await navigator.share({
+        title: "Hasil AdilKelompok",
+        text: "Ini hasil pembagian kelompok dari Titikkoma.",
+        url: shareUrl,
+      });
+
+      setShared(true);
+      setCopied(false);
+      setShareError("");
+      trackEvent("group_share_clicked", {
+        method: "native_share",
+        groupCount: resultGroups.length,
+        memberCount: resultGroups.flat().length,
+      });
+      window.setTimeout(() => setShared(false), 2000);
+    } catch {
+      // Ignore cancellation so the flow stays quiet.
+    }
   };
 
   return (
@@ -64,24 +191,63 @@ const GroupPicker: React.FC = () => {
         </button>
       </div>
 
-      {resultGroups.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 pb-6">
-          {resultGroups.map((group, i) => (
-            <div
-              key={i}
-              className="p-4 rounded-2xl border border-blue-100 dark:border-blue-900/30 bg-blue-50/50 dark:bg-blue-500/5 mb-4"
-            >
-              <h4 className="font-bold text-blue-600 mb-2">
-                Kelompok {i + 1}
-              </h4>
+      {sharedPayload && (
+        <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:border-emerald-900/50 dark:bg-emerald-500/10 dark:text-emerald-300">
+          Link ini membuka hasil kelompok yang sudah dibagikan. Kamu bisa cek hasilnya atau acak ulang dengan daftar baru.
+        </div>
+      )}
 
-              <ul className="text-sm space-y-1">
-                {group.map((m, idx) => (
-                  <li key={idx}>• {m}</li>
-                ))}
-              </ul>
+      {resultGroups.length > 0 && (
+        <div className="mt-6 pb-6">
+          <div className="mb-4 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white/70 p-4 dark:border-slate-800 dark:bg-slate-900/70 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                Bagikan hasil kelompok ini ke teman sekelas
+              </p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Link akan membuka hasil yang sama persis tanpa perlu input ulang.
+              </p>
             </div>
-          ))}
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <button
+                onClick={handleCopyShareLink}
+                className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition-all hover:border-blue-300 hover:text-blue-600 dark:border-slate-700 dark:text-slate-200"
+              >
+                {copied ? <Check size={16} /> : <Link2 size={16} />}
+                {copied ? "Link Tersalin" : "Salin Link"}
+              </button>
+              <button
+                onClick={handleNativeShare}
+                className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-700"
+              >
+                {shared ? <Check size={16} /> : <Share2 size={16} />}
+                {shared ? "Berhasil Dibagikan" : "Bagikan Hasil"}
+              </button>
+            </div>
+          </div>
+
+          {shareError && (
+            <p className="mb-4 text-sm text-rose-500">{shareError}</p>
+          )}
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {resultGroups.map((group, i) => (
+              <div
+                key={i}
+                className="rounded-2xl border border-blue-100 bg-blue-50/50 p-4 dark:border-blue-900/30 dark:bg-blue-500/5"
+              >
+                <h4 className="mb-2 font-bold text-blue-600">
+                  Kelompok {i + 1}
+                </h4>
+
+                <ul className="space-y-1 text-sm">
+                  {group.map((m, idx) => (
+                    <li key={idx}>• {m}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

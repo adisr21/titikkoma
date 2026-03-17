@@ -5,7 +5,7 @@ type MessageType = 'ijin' | 'bimbingan' | 'revisi' | 'nilai';
 
 interface TemplateConfig {
   label: string;
-  getContent: (lecturer: string, name: string, id: string) => string;
+  getContent: (lecturer: string, name: string, id: string, reason: string) => string;
 }
 
 const HaloLecturer: React.FC = () => {
@@ -14,30 +14,31 @@ const HaloLecturer: React.FC = () => {
   const [studentID, setStudentID] = useState('');
   const [phone, setPhone] = useState('');
   const [type, setType] = useState<MessageType>('ijin');
+  const [reason, setReason] = useState('');
   const [copied, setCopied] = useState(false);
 
   const templates: Record<MessageType, TemplateConfig> = {
     ijin: {
       label: 'Izin Kuliah',
-      getContent: (l, n, i) => `Selamat pagi/siang Bapak/Ibu ${l || '[Nama Dosen]'},\n\nPerkenalkan nama saya ${n || '[Nama Kamu]'}, NIM ${i || '[NIM]'}. Mohon maaf mengganggu waktunya. Saya bermaksud memohon izin tidak dapat mengikuti perkuliahan hari ini dikarenakan [Sebutkan Alasan]. Terima kasih atas pengertian Bapak/Ibu.`
+      getContent: (l, n, i, r) => `Selamat pagi/siang Bapak/Ibu ${l || '[Nama Dosen]'},\n\nPerkenalkan nama saya ${n || '[Nama Kamu]'}, NIM ${i || '[NIM]'}. Mohon maaf mengganggu waktunya. Saya bermaksud memohon izin tidak dapat mengikuti perkuliahan hari ini dikarenakan ${r || '[Sebutkan Alasan]'}. Terima kasih atas pengertian Bapak/Ibu.`
     },
     bimbingan: {
       label: 'Bimbingan',
-      getContent: (l, n, i) => `Selamat pagi/siang Bapak/Ibu ${l || '[Nama Dosen]'},\n\nSaya ${n || '[Nama Kamu]'}, NIM ${i || '[NIM]'}. Mohon maaf mengganggu waktunya. Apabila Bapak/Ibu memiliki waktu luang, saya bermaksud untuk berkonsultasi terkait progres [Sebutkan Topik]. Kira-kira kapan saya bisa menemui Bapak/Ibu? Terima kasih.`
+      getContent: (l, n, i, r) => `Selamat pagi/siang Bapak/Ibu ${l || '[Nama Dosen]'},\n\nSaya ${n || '[Nama Kamu]'}, NIM ${i || '[NIM]'}. Mohon maaf mengganggu waktunya. Apabila Bapak/Ibu memiliki waktu luang, saya bermaksud untuk berkonsultasi terkait progres ${r || '[Sebutkan Topik]'}. Kira-kira kapan saya bisa menemui Bapak/Ibu? Terima kasih.`
     },
     revisi: {
       label: 'Kirim Revisi',
-      getContent: (l, n, i) => `Selamat pagi/siang Bapak/Ibu ${l || '[Nama Dosen]'},\n\nSaya ${n || '[Nama Kamu]'}, NIM ${i || '[NIM]'}. Berikut saya lampirkan hasil revisi tugas [Sebutkan Tugas] sesuai dengan arahan Bapak/Ibu sebelumnya. Mohon bimbingannya lebih lanjut. Terima kasih banyak.`
+      getContent: (l, n, i, r) => `Selamat pagi/siang Bapak/Ibu ${l || '[Nama Dosen]'},\n\nSaya ${n || '[Nama Kamu]'}, NIM ${i || '[NIM]'}. Berikut saya lampirkan hasil revisi tugas ${r || '[Sebutkan Tugas]'} sesuai dengan arahan Bapak/Ibu sebelumnya. Mohon bimbingannya lebih lanjut. Terima kasih banyak.`
     },
     nilai: {
       label: 'Tanya Nilai',
-      getContent: (l, n, i) => `Selamat pagi/siang Bapak/Ibu ${l || '[Nama Dosen]'},\n\nPerkenalkan saya ${n || '[Nama Kamu]'}, NIM ${i || '[NIM]'}. Mohon maaf mengganggu Bapak/Ibu. Saya ingin mengonfirmasi terkait nilai mata kuliah [Sebutkan Matkul] yang belum muncul. Mohon arahannya, Bapak/Ibu. Terima kasih.`
+      getContent: (l, n, i, r) => `Selamat pagi/siang Bapak/Ibu ${l || '[Nama Dosen]'},\n\nPerkenalkan saya ${n || '[Nama Kamu]'}, NIM ${i || '[NIM]'}. Mohon maaf mengganggu Bapak/Ibu. Saya ingin mengonfirmasi terkait nilai mata kuliah ${r || '[Sebutkan Matkul]'} yang belum muncul. Mohon arahannya, Bapak/Ibu. Terima kasih.`
     }
   };
 
   const finalMessage = useMemo(() => {
-    return templates[type].getContent(lecturerName, studentName, studentID);
-  }, [type, lecturerName, studentName, studentID]);
+    return templates[type].getContent(lecturerName, studentName, studentID, reason);
+  }, [type, lecturerName, studentName, studentID, reason]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(finalMessage);
@@ -114,6 +115,10 @@ const HaloLecturer: React.FC = () => {
               type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
               placeholder="No. WhatsApp (08...)" className="input-with-icon"
             />
+          </div>
+          <div className="relative">
+            <MessageSquare className="absolute left-3 top-3.5 text-slate-400" size={18} />
+            <input type="text" value={reason} onChange={(e) => setReason(e.target.value)} className="input-with-icon" />
           </div>
         </div>
 
