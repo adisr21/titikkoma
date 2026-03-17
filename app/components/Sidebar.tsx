@@ -10,7 +10,7 @@ export default function Sidebar() {
     <>
       {/* DESKTOP SIDEBAR */}
       <aside
-        className={`fixed md:static top-0 left-0 h-full w-64 bg-gray-900 text-white transform transition-transform duration-300 z-40
+        className={`fixed md:static top-0 left-0 h-350 w-64 bg-gray-900 text-white transform transition-transform duration-300 z-40
         ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
         <nav className="p-4 mt-16 space-y-4 border-r border-gray-700">
@@ -21,6 +21,10 @@ export default function Sidebar() {
           <NavItem to="/citation-generator" icon={<Quote size={18} />} label="Citation Generator" />
           <NavItem to="/halo-lecturer" icon={<MessageSquare size={18} />} label="Halo Lecturere" />
         </nav>
+        {/* footer */}
+        <div className="absolute top-300 bottom-4 left-4 right-4 text-sm text-gray-400 text-center">
+          Built by <a href="https://adisr21.xyz" className="text-blue-400 hover:underline" target="_blank">Adi Sukarno.</a>
+        </div>
       </aside>
 
       {/* MOBILE FLOATING BOTTOM NAV */}
