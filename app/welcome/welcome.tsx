@@ -49,7 +49,7 @@ export function Welcome() {
 
         <ToolCard
           title="Halo Dosen"
-          description=""
+          description="Generate polite messages to lecturers for various scenarios."
           icon={<MessageSquare className="text-yellow-500" />}
           href="/halo-lecturer"
         />
