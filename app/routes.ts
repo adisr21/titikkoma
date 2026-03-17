@@ -6,5 +6,6 @@ export default [
     route("/deadline-widget", "routes/deadline-widget-pages.tsx"),
     route("/paraphrase-checker", "routes/paraphrase-checker-pages.tsx"),
     route('/citation-generator', 'routes/citation-generator-pages.tsx'),
-    route('/halo-lecturer', 'routes/halo-lecturer-pages.tsx')
+    route('/halo-lecturer', 'routes/halo-lecturer-pages.tsx'),
+    route('/word-counter', 'routes/word-counter-pages.tsx'),
 ] satisfies RouteConfig;

@@ -59,7 +59,7 @@ const HaloLecturer: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500 mt-3 mx-3 mr-3">
+    <div className="max-w-4xl mx-auto p-6 space-y-6 animate-in fade-in duration-500">
       <h2 className="text-2xl font-bold flex items-center gap-2">
         <MessageSquare className="text-yellow-500" /> HaloDosen
       </h2>

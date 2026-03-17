@@ -13,21 +13,10 @@ body {
     color-scheme: dark;
   }
 }
-
-.input-field {
-  @apply w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 outline-none focus:ring-2 ring-blue-500 transition-all text-sm;
-}
-.input-with-icon {
-  @apply w-full p-3 pl-10 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 outline-none focus:ring-2 ring-green-500 transition-all text-sm;
-}
-
-.stat-card {
-  @apply p-4 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center text-center shadow-sm hover:shadow-md transition-all;
-}
 /* Mobile styles */
 @media (max-width: 640px) {
   /* Add your mobile-specific styles here */
-
+  
 }
 /* Tablet styles */
 @media (min-width: 641px) and (max-width: 1024px) {

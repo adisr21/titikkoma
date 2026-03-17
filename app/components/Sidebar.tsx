@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router";
-import { Home, Users, Timer, FileText, Quote, MessageSquare } from "lucide-react";
+import { Hash, Home, Users, Timer, FileText, Quote, MessageSquare } from "lucide-react";
 
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
@@ -18,7 +18,8 @@ export default function Sidebar() {
           <NavItem to="/deadline-widget" icon={<Timer size={18} />} label="Deadline Widget" />
           <NavItem to="/paraphrase-checker" icon={<FileText size={18} />} label="Paraphrase Checker" />
           <NavItem to="/citation-generator" icon={<Quote size={18} />} label="Citation Generator" />
-          <NavItem to="/halo-lecturer" icon={<MessageSquare size={18} />} label="Halo Lecturere" />
+          <NavItem to="/halo-lecturer" icon={<MessageSquare size={18} />} label="Halo Lecturer" />
+          <NavItem to="/word-counter" icon={<Hash size={18} />} label="Word Counter" />
         </nav>
         {/* footer */}
         <div className="absolute top-300 bottom-4 left-4 right-4 text-sm text-gray-400 text-center">
@@ -34,6 +35,7 @@ export default function Sidebar() {
         <BottomItem to="/paraphrase-checker" icon={<FileText size={20} />} />
         <BottomItem to="/citation-generator" icon={<Quote size={20} />} />
         <BottomItem to="/halo-lecturer" icon={<MessageSquare size={20} />} />
+        <BottomItem to="/word-counter" icon={<Hash size={20} />} />
       </nav>
     </>
   );
