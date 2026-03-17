@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router";
-import { Button } from "./Button";
+import { Link, NavLink } from "react-router";
 import { Home, Users, Timer, FileText, Quote, MessageSquare } from "lucide-react";
 
 export default function Sidebar() {
@@ -68,13 +67,13 @@ function BottomItem({
   icon: React.ReactNode;
 }) {
   return (
-    <Link
+    <NavLink
       to={to}
       className={({ isActive }) =>
         `p-2 rounded-full ${isActive ? "bg-blue-500" : "hover:bg-gray-700"}`
       }
     >
       {icon}
-    </Link>
+    </NavLink>
   );
 }
