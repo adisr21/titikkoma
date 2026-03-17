@@ -59,26 +59,30 @@ const HaloLecturer: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6 animate-in fade-in duration-500">
-      <h2 className="text-2xl font-bold flex items-center gap-2">
-        <MessageSquare className="text-yellow-500" /> HaloDosen
-      </h2>
+    <div className="max-w-xl mx-auto p-6 bg-white dark:bg-slate-900 rounded-2xl shadow-lg">
+      <div>
+        <h2 className="text-2xl font-bold flex items-center gap-2">
+          <MessageSquare className="text-yellow-500" /> HaloDosen
+        </h2>
+      </div>
 
-      {/* Skenario Selector */}
-      <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-        {(Object.keys(templates) as MessageType[]).map((t) => (
-          <button
-            key={t}
-            onClick={() => setType(t)}
-            className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap border transition-all ${
-              type === t
-              ? 'bg-green-600 border-green-600 text-white shadow-lg shadow-green-500/20'
-              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-400'
-            }`}
-          >
-            {templates[t].label}
-          </button>
-        ))}
+
+      <div className='my-3'>
+        <div className="flex gap-2 pb-2">
+          {(Object.keys(templates) as MessageType[]).map((t) => (
+            <button
+              key={t}
+              onClick={() => setType(t)}
+              className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap border transition-all ${
+                type === t
+                ? 'bg-green-600 border-green-600 text-white shadow-lg shadow-green-500/20'
+                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-400'
+              }`}
+            >
+              {templates[t].label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -128,13 +132,13 @@ const HaloLecturer: React.FC = () => {
       </div>
 
       <button
-        onClick="handleSendWA"
-        className="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-bold flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-xl shadow-green-500/20"
+        onClick={handleSendWA}
+        className="w-full py-3 my-3 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-bold flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-xl shadow-green-500/20"
       >
         <Send size={20} /> Kirim WhatsApp
       </button>
 
-      <p className="text-[10px] text-center text-slate-400 uppercase tracking-widest">
+      <p className="text-[10px] text-center text-slate-400 uppercase tracking-widest mt-4">
         Pesan akan dikirim langsung tanpa menyimpan nomor kontak
       </p>
     </div>
@@ -142,6 +146,3 @@ const HaloLecturer: React.FC = () => {
 };
 
 export default HaloLecturer;
-
-// CSS Helper
-// .input-with-icon { @apply w-full p-3 pl-10 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 outline-none focus:ring-2 ring-green-500 transition-all text-sm; }
