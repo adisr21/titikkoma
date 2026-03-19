@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   # The React Application
-  titikkoma-app:
+  app:
     build:
       context: .
       dockerfile: Dockerfile
@@ -25,7 +25,7 @@ services:
       # Optional: mount your build folder if you prefer not to build inside the proxy image
       # - ./dist:/usr/share/nginx/html:ro
     depends_on:
-      - titikkoma-app
+      - app
     networks:
       - titikkoma_network
 
