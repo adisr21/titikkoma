@@ -118,7 +118,7 @@ const SpinWheel: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 p-2 md:p-4">
+    <div className="max-w-xl mx-auto p-6 bg-white dark:bg-slate-900 rounded-2xl shadow-lg">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-black italic tracking-tighter flex items-center gap-2">
           <RotateCw className="text-orange-500" /> Spin Wheel
