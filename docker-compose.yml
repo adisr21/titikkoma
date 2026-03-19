@@ -8,8 +8,8 @@ services:
       dockerfile: Dockerfile
     container_name: titikkoma_frontend
     restart: always
-    expose:
-      - "3000" # Expose the React app on port 3000
+    ports:
+      - "3000:80"  # Mapping port 3000 VPS ke port 80 container
     networks:
       - titikkoma_network
     # We don't expose ports here because Nginx will handle external traffic
