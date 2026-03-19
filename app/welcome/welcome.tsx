@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Users, Home, Timer, FileText, Quote, MessageSquare, BrainCircuit } from "lucide-react";
+import { Users, Home, Timer, FileText, Quote, MessageSquare, BrainCircuit, RotateCw } from "lucide-react";
 
 export function Welcome() {
   return (
@@ -31,6 +31,13 @@ export function Welcome() {
           description="Connect matching dots without crossing lines."
           icon={<BrainCircuit className="text-blue-500" />}
           href="/connect-dots"
+        />
+
+        <ToolCard
+          title="Spin Wheel"
+          description="Randomly select a winner from a list of names."
+          icon={<RotateCw className="text-orange-500" />}
+          href="/spin-wheel"
         />
 
         <ToolCard
