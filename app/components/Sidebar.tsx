@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router";
-import { Hash, Home, Users, Timer, FileText, Quote, MessageSquare, Moon, Sun, BrainCircuit } from "lucide-react";
+import { Hash, Home, Users, Timer, FileText, RotateCw, Quote, MessageSquare, Moon, Sun, BrainCircuit } from "lucide-react";
 
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
@@ -37,10 +37,11 @@ export default function Sidebar() {
         <nav className="p-4 mt-16 space-y-4 border-r border-gray-700">
           <NavItem to="/" icon={<Home size={18} />} label="Home" isDark={isDark} />
           <NavItem to="/group-picker" icon={<Users size={18} />} label="Group Picker" isDark={isDark} />
+          <NavItem to="/spin-wheel" icon={<RotateCw size={18} />} label="Spin Wheel" isDark={isDark} />
+          <NavItem to="/connect-dots" icon={<BrainCircuit size={18} />} label="Connect Dots" isDark={isDark} />
           <NavItem to="/citation-generator" icon={<Quote size={18} />} label="Citation Generator" isDark={isDark} />
           <NavItem to="/halo-lecturer" icon={<MessageSquare size={18} />} label="Halo Lecturer" isDark={isDark} />
           <NavItem to="/word-counter" icon={<Hash size={18} />} label="Word Counter" isDark={isDark} />
-          <NavItem to="/connect-dots" icon={<BrainCircuit size={18} />} label="Connect Dots" isDark={isDark} />
 
           <hr className={`my-4 ${isDark ? "border-slate-800" : "border-slate-100"}`} />
 
@@ -62,8 +63,8 @@ export default function Sidebar() {
       <nav className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-gray-900 text-white rounded-full shadow-lg px-6 py-3 flex gap-6 items-center mt-20">
         <BottomItem to="/" icon={<Home size={20} />} />
         <BottomItem to="/group-picker" icon={<Users size={20} />} />
+        <BottomItem to="/spin-wheel" icon={<RotateCw size={20} />} />
         <BottomItem to="/connect-dots" icon={<BrainCircuit size={20} />} />
-        <BottomItem to="/citation-generator" icon={<Quote size={20} />} />
         <BottomItem to="/halo-lecturer" icon={<MessageSquare size={20} />} />
         <BottomItem to="/word-counter" icon={<Hash size={20} />} />
 

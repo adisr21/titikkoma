@@ -9,4 +9,5 @@ export default [
     route('/halo-lecturer', 'routes/halo-lecturer-pages.tsx'),
     route('/word-counter', 'routes/word-counter-pages.tsx'),
     route('/connect-dots', 'routes/connect-dots-pages.tsx'),
+    route('/spin-wheel', 'routes/spin-wheel-pages.tsx'),
 ] satisfies RouteConfig;
