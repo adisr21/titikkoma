@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # The React Application
   app:
     build:
       context: .
@@ -9,23 +8,20 @@ services:
     container_name: titikkoma_frontend
     restart: always
     expose:
-      - "80" # Port internal Nginx di dalam container app
+      - "80"
     networks:
       - titikkoma_network
-    # We don't expose ports here because Nginx will handle external traffic
 
-  # The Reverse Proxy (Nginx)
   nginx-proxy:
     image: nginx:stable-alpine
     container_name: titikkoma_proxy
     restart: always
     ports:
       - "80:80"
-      - "443:443" # For future SSL/HTTPS
+      - "443:443"
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      # Optional: mount your build folder if you prefer not to build inside the proxy image
-      # - ./dist:/usr/share/nginx/html:ro
+      # Use the PROXY config here
+      - ./proxy.nginx.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - app
     networks:
