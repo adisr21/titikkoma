@@ -196,7 +196,7 @@ const ConnectDots: React.FC = () => {
     <div className="space-y-6 select-none">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold flex items-center gap-2">
-          <BrainCircuit className="text-blue-500" /> JedaKoma
+          <BrainCircuit className="text-blue-500" /> Connect Dots
         </h2>
         <button onClick={initGame} className="p-2 bg-slate-100 dark:bg-slate-800 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
           <RefreshCw size={20} />

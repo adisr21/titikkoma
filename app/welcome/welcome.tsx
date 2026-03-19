@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Users, Home, Timer, FileText, Quote, MessageSquare } from "lucide-react";
+import { Users, Home, Timer, FileText, Quote, MessageSquare, BrainCircuit } from "lucide-react";
 
 export function Welcome() {
   return (
@@ -24,6 +24,13 @@ export function Welcome() {
           description="Randomly divide names into fair groups."
           icon={<Users className="text-blue-500" />}
           href="/group-picker"
+        />
+
+        <ToolCard
+          title="Connect Dots"
+          description="Connect matching dots without crossing lines."
+          icon={<BrainCircuit className="text-blue-500" />}
+          href="/connect-dots"
         />
 
         <ToolCard
