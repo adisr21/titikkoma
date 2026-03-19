@@ -9,16 +9,11 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM nginx:alpine
+FROM node:20
 
-# Remove default config
-RUN rm /etc/nginx/conf.d/default.conf
+WORKDIR /app
+COPY --from=build /app /app
 
-# Copy custom nginx config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 3000
 
-# Copy React build
-COPY --from=build /app/dist /usr/share/nginx/html
-
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "start"]
