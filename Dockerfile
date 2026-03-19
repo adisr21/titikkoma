@@ -1,33 +1,20 @@
-# Build stage
-FROM node:20 AS build
+FROM node:20-alpine
 
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
 
+# Install only prod deps
+COPY package*.json ./
+RUN npm install --omit=dev
+
+# Copy build output from local (faster CI/CD)
 COPY . .
+
 RUN npm run build
 
-# Production stage
-FROM node:20
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOST=0.0.0.0
 
-# Install nginx
-RUN apt-get update && apt-get install -y nginx
+EXPOSE 3000
 
-WORKDIR /app
-
-# Copy app
-COPY --from=build /app /app
-
-# Copy nginx config
-COPY nginx.conf /etc/nginx/sites-available/default
-
-# Remove default nginx config (optional safety)
-RUN rm /etc/nginx/sites-enabled/default || true && \
-    ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-
-# Expose port 80 (nginx)
-EXPOSE 80
-
-# Start both nginx + node
-CMD service nginx start && npm run start
+CMD ["npm", "run", "start"]
