@@ -8,8 +8,8 @@ services:
       dockerfile: Dockerfile
     container_name: titikkoma_frontend
     restart: always
-    ports:
-      - "3000:3000"  # Mapping port 3000 VPS ke port 3000 container
+    expose:
+      - "80" # Port internal Nginx di dalam container app
     networks:
       - titikkoma_network
     # We don't expose ports here because Nginx will handle external traffic
