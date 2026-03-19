@@ -8,4 +8,5 @@ export default [
     route('/citation-generator', 'routes/citation-generator-pages.tsx'),
     route('/halo-lecturer', 'routes/halo-lecturer-pages.tsx'),
     route('/word-counter', 'routes/word-counter-pages.tsx'),
+    route('/connect-dots', 'routes/connect-dots-pages.tsx'),
 ] satisfies RouteConfig;

@@ -42,6 +42,7 @@ export default function Sidebar() {
           <NavItem to="/citation-generator" icon={<Quote size={18} />} label="Citation Generator" isDark={isDark} />
           <NavItem to="/halo-lecturer" icon={<MessageSquare size={18} />} label="Halo Lecturer" isDark={isDark} />
           <NavItem to="/word-counter" icon={<Hash size={18} />} label="Word Counter" isDark={isDark} />
+          <NavItem to="/connect-dots" icon={<MessageSquare size={18} />} label="Connect Dots" isDark={isDark} />
 
           <hr className={`my-4 ${isDark ? "border-slate-800" : "border-slate-100"}`} />
 
