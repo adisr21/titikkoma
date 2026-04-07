@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Application
-APP_NAME="titikkoma-frontend"
+APP_NAME="titikkoma"
 
 # Directories
 PROJECT_DIR="${HOME}/${APP_NAME}"
