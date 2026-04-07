@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# This script is used to deploy the application to the production environment.
-# It will build the application and copy the files to the "current" directory.
-# Then, it will restart the nginx container to pick up the new files.
+# Exit segera jika ada command yang gagal
+set -e
 
 # Configuration
 source "$(dirname "$0")/config.bash"
@@ -15,76 +14,58 @@ NEW_BUILD_DIR="${BUILDS_DIR}/build-${TIMESTAMP}"
 # -----------------------------------------------------------------------------
 
 function is_nginx_running() {
-  # Verify production container is running on correct port
-  sudo docker ps | grep -q "$NGINX_CONTAINER.*:$PROD_PORT->80"
-
-  return $?
+  # Cek apakah container nginx berjalan
+  sudo docker ps --format '{{.Names}}' | grep -q "^${NGINX_CONTAINER}$"
 }
 
 function npm_run_build() {
-  export PATH=$PATH:${PROJECT_DIR}/node_modules/.bin
+  echo "  - Installing dependencies..."
+  npm install --prefix "${PROJECT_DIR}"
 
-  npm run build --prefix "${PROJECT_DIR}" || return 1
+  echo "  - Running build process..."
+  npm run build --prefix "${PROJECT_DIR}"
 
   mkdir -p "$NEW_BUILD_DIR"
-  cp -r "${PROJECT_DIR}/build/"* "$NEW_BUILD_DIR"
+  # React Router v7/Remix membutuhkan seluruh folder build (client & server)
+  cp -r "${PROJECT_DIR}/build" "$NEW_BUILD_DIR/"
+  cp "${PROJECT_DIR}/package.json" "$NEW_BUILD_DIR/"
+  # Jika menggunakan output standalone/server, pastikan file tersebut ikut
 }
 
 function is_build_successful() {
-  [ -f "$NEW_BUILD_DIR/server/index.js" ]
-
-  return $?
+  # Sesuaikan path ini dengan output React Router Anda (biasanya build/server/index.js)
+  [ -d "$NEW_BUILD_DIR/build" ] && [ -f "$NEW_BUILD_DIR/package.json" ]
 }
 
-function run_nginx_verify_container() {
-
+function run_verify_container() {
+  # GUNAKAN NODE IMAGE, bukan Nginx, karena Anda menjalankan 'npx react-router-serve'
   sudo docker run -d --name "${VERIFY_CONTAINER_NAME}" \
     -p "${VERIFY_PORT}:3000" \
     -v "$NEW_BUILD_DIR:/app" \
     -w /app \
-    nginx:alpine \
-    sh -c "npm install --omit=dev && PORT=3000 npx react-router-serve ./server/index.js"
+    node:20-alpine \
+    sh -c "npm install --omit=dev && PORT=3000 npx react-router-serve ./build/server/index.js"
 }
 
 function is_curl_verify_port_successful() {
-  status=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${VERIFY_PORT}")
-
-  [ "$status" -eq 200 ]
+  # Gunakan --fail agar curl return non-zero exit code jika 404/500
+  curl -s --fail "http://localhost:${VERIFY_PORT}" > /dev/null
 }
 
 function reload_nginx_container() {
   sudo docker exec "$NGINX_CONTAINER" nginx -s reload
-
-  return $?
 }
 
 function clean_old_builds() {
-  # -maxdepth 1: Only look at immediate subdirectories
-  # -mindepth 1: Don't include the builds directory itself
-  # -type d: Only directories
-  # -printf '%T@ %p\n': Print timestamp and path
   echo "Cleaning old build directories..."
-  find "$BUILDS_DIR" -maxdepth 1 -mindepth 1 -type d -printf '%T@ %p\n' |
-    sort -nr |       # sort numerically by timestamp
-    tail -n +3 |     # keep the last 2
-    cut -d' ' -f2- | # remove the timestamp
-    while read -r dir; do
-      echo "Removing: $dir"
-      rm -rf "$dir"
-    done
+  # Mencari direktori build-*, urutkan berdasarkan waktu, hapus selain 2 terbaru
+  ls -dt "${BUILDS_DIR}"/build-* | tail -n +3 | xargs -r rm -rf
 }
 
-info_msg() {
-  echo -e "\e[1;34m$1\e[0m"
-}
-
-error_msg() {
-  echo -e "\e[1;31m$1\e[0m"
-}
-
-success_msg() {
-  echo -e "\e[1;32m$1\e[0m"
-}
+# UI Helpers
+info_msg() { echo -e "\e[1;34m$1\e[0m"; }
+error_msg() { echo -e "\e[1;31m$1\e[0m"; }
+success_msg() { echo -e "\e[1;32m$1\e[0m"; }
 
 # -----------------------------------------------------------------------------
 # Execution
@@ -92,90 +73,67 @@ success_msg() {
 
 info_msg "[ STEP 1 ]: Verify nginx container running."
 if is_nginx_running; then
-  echo "  - Production container running on port $PROD_PORT"
+  echo "  - Production container $NGINX_CONTAINER is up."
 else
-  error_msg "  - [ ERROR ]: Production container not running on port $PROD_PORT"
+  error_msg "  - [ ERROR ]: Production container $NGINX_CONTAINER is not running."
   exit 1
 fi
 
-echo
 info_msg "[ STEP 2 ]: Run npm run build."
 npm_run_build
 
-echo
 info_msg "[ STEP 3 ]: Verify build successful."
 if is_build_successful; then
-  success_msg "  [ SUCCESS ]: Build successful"
+  success_msg "  [ SUCCESS ]: Build artifacts found."
 else
-  error_msg "  [ ERROR ]: Build failed"
-  echo "  - removing new build directory $NEW_BUILD_DIR"
+  error_msg "  [ ERROR ]: Build artifacts missing."
   rm -rf "$NEW_BUILD_DIR"
   exit 1
 fi
 
-echo
-info_msg "[ STEP 4 ]: Starting verification container..."
-run_nginx_verify_container
+info_msg "[ STEP 4 ]: Starting verification container (Node.js)..."
+# Hapus container lama jika masih ada (karena crash sebelumnya)
+sudo docker rm -f "${VERIFY_CONTAINER_NAME}" 2>/dev/null || true
+run_verify_container
 
-# Verify new build
-echo
-info_msg "[ STEP 5 ]: Verifying new build with $VERIFY_CONTAINER_NAME by curling port $VERIFY_PORT"
+info_msg "[ STEP 5 ]: Verifying new build on port $VERIFY_PORT"
 attempt=1
-max_attempts=30
+max_attempts=15 # 30 detik biasanya cukup
 
 while [ $attempt -le $max_attempts ]; do
   if is_curl_verify_port_successful; then
     success_msg "  [ SUCCESS ]: Verification successful"
 
-    # stop verification container
-    echo "  - Stopping verification container $VERIFY_CONTAINER_NAME"
-    sudo docker stop "$VERIFY_CONTAINER_NAME"
+    sudo docker stop "${VERIFY_CONTAINER_NAME}"
+    sudo docker rm "${VERIFY_CONTAINER_NAME}"
 
-    echo "  - Removing verification container $VERIFY_CONTAINER_NAME"
-    sudo docker rm "$VERIFY_CONTAINER_NAME"
+    echo "  - Updating symlink 'current'..."
+    # ln -sfn membuat link baru secara atomik dan mengganti yang lama (-f)
+    ln -sfn "$NEW_BUILD_DIR" "$BUILDS_DIR/current"
 
-    echo "  - Backing up current symlink"
-    mv "$BUILDS_DIR/current" "$BUILDS_DIR/current.backup"
-
-    echo "  - Create new symlink called 'current' to new build directory"
-    cd "${BUILDS_DIR}" && ln -s "build-${TIMESTAMP}" "current"
-
-    echo
     info_msg "[ STEP 6 ]: Reloading nginx"
     if reload_nginx_container; then
       success_msg "  [ SUCCESS ]: Reloaded nginx"
     else
       error_msg "  [ ERROR ]: Failed to reload nginx."
-      echo "  - Rolling back..."
-
-      mv -f "$BUILDS_DIR/current.backup" "$BUILDS_DIR/current"
-      reload_nginx_container
-      rm -rf "$NEW_BUILD_DIR"
       exit 1
     fi
 
-    echo
-    info_msg "[ STEP 7 ]: Removing backup symlink"
-    rm -rf "$BUILDS_DIR/current.backup"
-    echo "  - removed $BUILDS_DIR/current.backup"
-
-    echo
-    info_msg "[ STEP 8 ]: Cleaning up old builds, keeping last 2"
+    info_msg "[ STEP 7 ]: Cleaning up old builds"
     clean_old_builds
 
-    echo
-    success_msg "Too easy. Deployment successful! 🎉"
-    echo
+    success_msg "Deployment successful! 🎉"
     exit 0
   fi
-  echo "  - Waiting for verification.. (Attempt $attempt/$max_attempts)"
+  echo "  - Waiting for app to start... ($attempt/$max_attempts)"
   sleep 2
   attempt=$((attempt + 1))
 done
 
 # Cleanup on failure
-echo "Verification failed after $max_attempts attempts"
-sudo docker stop "$VERIFY_CONTAINER_NAME"
-sudo docker rm "$VERIFY_CONTAINER_NAME"
-rm -rf "$NEW_BUILD_DIR"
+error_msg "Verification failed!"
+sudo docker stop "$VERIFY_CONTAINER_NAME" || true
+sudo docker rm "$VERIFY_CONTAINER_NAME" || true
+# Jangan hapus NEW_BUILD_DIR jika ingin debug manual, tapi jika di CI/CD sebaiknya hapus
+# rm -rf "$NEW_BUILD_DIR"
 exit 1
