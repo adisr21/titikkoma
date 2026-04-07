@@ -26,7 +26,7 @@ function npm_run_build() {
 }
 
 function is_build_successful() {
-  [ -f "$NEW_BUILD_DIR/index.html" ]
+  [ -f "$NEW_BUILD_DIR/client/index.html" ]
 
   return $?
 }
@@ -39,7 +39,7 @@ server {
     listen 80;
     server_name localhost;
 
-    root /usr/share/nginx/html;
+    root /usr/share/nginx/html/client;
     index index.html;
 
     location / {
