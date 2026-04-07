@@ -22,7 +22,12 @@ function is_nginx_running() {
 }
 
 function npm_run_build() {
-  BUILD_PATH=$NEW_BUILD_DIR npm run build --prefix "${PROJECT_DIR}"
+  export PATH=$PATH:${PROJECT_DIR}/node_modules/.bin
+
+  npm run build --prefix "${PROJECT_DIR}" || return 1
+
+  mkdir -p "$NEW_BUILD_DIR"
+  cp -r "${PROJECT_DIR}/build/"* "$NEW_BUILD_DIR"
 }
 
 function is_build_successful() {
