@@ -165,7 +165,7 @@ while [ $attempt -le $max_attempts ]; do
     mv "$BUILDS_DIR/current" "$BUILDS_DIR/current.backup"
 
     echo "  - Create new symlink called 'current' to new build directory"
-    cd "${BUILDS_DIR}" && ln -s "$NEW_BUILD_DIR" "current"
+    cd "${BUILDS_DIR}" && ln -s "build-${TIMESTAMP}" "current"
 
     echo
     info_msg "[ STEP 6 ]: Reloading nginx"
