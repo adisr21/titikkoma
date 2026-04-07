@@ -40,6 +40,7 @@ function is_build_successful() {
 function run_verify_container() {
   # GUNAKAN NODE IMAGE, bukan Nginx, karena Anda menjalankan 'npx react-router-serve'
   sudo docker run -d --name "${VERIFY_CONTAINER_NAME}" \
+    --user "$(id -u):$(id -g)" \
     -p "${VERIFY_PORT}:3000" \
     -v "$NEW_BUILD_DIR:/app" \
     -w /app \
@@ -59,7 +60,7 @@ function reload_nginx_container() {
 function clean_old_builds() {
   echo "Cleaning old build directories..."
   # Mencari direktori build-*, urutkan berdasarkan waktu, hapus selain 2 terbaru
-  ls -dt "${BUILDS_DIR}"/build-* | tail -n +3 | xargs -r rm -rf
+  ls -dt "${BUILDS_DIR}"/build-* | tail -n +3 | xargs -r sudo rm -rf
 }
 
 # UI Helpers
@@ -135,5 +136,5 @@ error_msg "Verification failed!"
 sudo docker stop "$VERIFY_CONTAINER_NAME" || true
 sudo docker rm "$VERIFY_CONTAINER_NAME" || true
 # Jangan hapus NEW_BUILD_DIR jika ingin debug manual, tapi jika di CI/CD sebaiknya hapus
-# rm -rf "$NEW_BUILD_DIR"
+sudo rm -rf "$NEW_BUILD_DIR"
 exit 1
