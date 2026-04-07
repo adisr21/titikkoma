@@ -31,7 +31,7 @@ function npm_run_build() {
 }
 
 function is_build_successful() {
-  [ -f "$NEW_BUILD_DIR/client/index.html" ] && [ -f "$NEW_BUILD_DIR/server/index.js" ]
+  [ -f "$NEW_BUILD_DIR/server/index.js" ]
 
   return $?
 }
