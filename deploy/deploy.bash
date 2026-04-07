@@ -38,45 +38,18 @@ function is_build_successful() {
 
 function run_nginx_verify_container() {
 
-  # Create temporary nginx config for verification
-  cat >/tmp/verify-nginx.conf <<EOF
-server {
-    listen 80;
-    server_name localhost;
-
-    root /usr/share/nginx/html/client;
-    index index.html;
-
-    location / {
-        try_files \$uri \$uri/ /index.html =494;
-    }
-
-    # Handle 404s with index.html
-    error_page 404 =200 /index.html;
-
-    # Handle favicon.ico
-    location = /favicon.ico {
-        log_not_found off;
-        access_log off;
-    }
-}
-EOF
-  # map port 3001 to 80 on nginx container
-  # mount the new build as /usr/share/nginx/html, default folder for static files
-  # mount the nginx config file
   sudo docker run -d --name "${VERIFY_CONTAINER_NAME}" \
-    -p "${VERIFY_PORT}:80" \
-    -v "$NEW_BUILD_DIR:/usr/share/nginx/html" \
-    -v "/tmp/verify-nginx.conf:/etc/nginx/conf.d/default.conf" \
-    nginx:alpine
-
-  return $?
+    -p "${VERIFY_PORT}:3000" \
+    -v "$NEW_BUILD_DIR:/app" \
+    -w /app \
+    node:20-alpine \
+    sh -c "npm install --omit=dev && PORT=3000 npx react-router-serve ./server/index.js"
 }
 
 function is_curl_verify_port_successful() {
-  curl -s "http://localhost:${VERIFY_PORT}" >/dev/null
+  status=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${VERIFY_PORT}")
 
-  return $?
+  [ "$status" -eq 200 ]
 }
 
 function reload_nginx_container() {
