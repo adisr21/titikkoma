@@ -42,7 +42,7 @@ function run_nginx_verify_container() {
     -p "${VERIFY_PORT}:3000" \
     -v "$NEW_BUILD_DIR:/app" \
     -w /app \
-    node:20-alpine \
+    nginx:alpine \
     sh -c "npm install --omit=dev && PORT=3000 npx react-router-serve ./server/index.js"
 }
 
